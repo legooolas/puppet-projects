@@ -167,7 +167,7 @@ define projects::project::apache::vhost (
   $redirect_to_https = false,
   $php_values = {},
   $forwarded_custom_log = true,
-  Hash $rewrites = {}
+  Array $rewrites = []
 ) {
 
   if ($ip) {
