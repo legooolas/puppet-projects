@@ -167,6 +167,7 @@ define projects::project::apache::vhost (
   $redirect_to_https = false,
   $php_values = {},
   $forwarded_custom_log = true,
+  Hash $rewrites = {}
 ) {
 
   if ($ip) {
@@ -287,6 +288,7 @@ define projects::project::apache::vhost (
       add_listen            => false,
       headers               => 'Set Strict-Transport-Security "max-age=63072000; includeSubdomains;"',
       php_values            => $php_values,
+      rewrites              => $rewrites,
       *                     => $custom_log_entries,
     }
   }
