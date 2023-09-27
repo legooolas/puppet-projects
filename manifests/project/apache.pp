@@ -237,7 +237,9 @@ define projects::project::apache::vhost (
       "${::projects::basedir}/${projectname}/etc/ssl/certs/${cert_name}.crt",
       ssl_key               => 
       "${::projects::basedir}/${projectname}/etc/ssl/private/${cert_name}.key",
-      serveraliases         => $altnames,
+      serveraliases       => $altnames,
+      # Use mod_remoteip for client IP if available:
+      access_log_format   => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"',
       ip                    => $ip,
       ip_based              => $ip_based,
       add_listen            => false,
