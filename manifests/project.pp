@@ -2,17 +2,16 @@
 #
 # A top level project type.
 define projects::project (
-  $apache                    = {},
-  $tomcat                    = {},
-  $mysql                     = {},
-  $apache_common             = {},
-  $default_vhost             = true,
-  $uid                       = undef,
-  $gid                       = undef,
-  $users                     = [],
-  $force_local_project_group = false,
-  $ensure                    = undef,
-  $description               = ""
+  $apache        = {},
+  $tomcat        = {},
+  $mysql         = {},
+  $apache_common = {},
+  $default_vhost = true,
+  $uid           = undef,
+  $gid           = undef,
+  $users         = [],
+  $ensure        = undef,
+  $description   = ""
 ) {
 
   # If least one project definition exists for this host, creaste the base structure
