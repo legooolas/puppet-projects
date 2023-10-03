@@ -2,9 +2,9 @@
 #
 # Defines an apache project
 define projects::project::apache (
-  $vhosts           = {},
-  $apache_common    = {},
-  $default_vhost    = true,
+  Hash    $vhosts        = {},
+  Hash    $apache_common = {},
+  Boolean $default_vhost = true,
 ) {
   $apache_user = lookup('projects::project::apache::apache_user', String, first, 'apache')
 
@@ -138,7 +138,6 @@ define projects::project::apache (
 
   create_resources('::projects::project::apache::vhost', $vhosts, {
     'projectname' => $title,
-    'apache_user' => $apache_user
   })
 }
 
@@ -153,24 +152,24 @@ define projects::project::apache (
 #   Enabled by default at present but a future release will disable this.
 #
 define projects::project::apache::vhost (
-  $projectname = undef,
-  $docroot = 'www',
-  $options = ['Indexes','FollowSymLinks','MultiViews'],
-  $allow_override = ['None'],
-  $port = 80,
-  $vhost_name = $title,
-  $ssl = false,
-  $php = false,
-  $apache_user = 'apache',
-  $altnames = [],
-  $ip = undef,
-  $cert_name = $vhost_name,
-  $redirect = undef,
-  $redirect_to_https = false,
-  $php_values = {},
-  $forwarded_custom_log = true,
-  Array $rewrites = []
+  String                  $projectname,
+  String                  $docroot              = 'www',
+  Array[String]           $options              = ['Indexes','FollowSymLinks','MultiViews'],
+  Array[String]           $allow_override       = ['None'],
+  Integer                 $port                 = 80,
+  String                  $vhost_name           = $title,
+  Boolean                 $ssl                  = false,
+  Boolean                 $php                  = false,
+  Array[String]           $altnames             = [],
+  Variant[String, Undef]  $ip                   = undef,
+  String                  $cert_name            = $vhost_name,
+  Variant[String, Undef]  $redirect             = undef,
+  Boolean                 $redirect_to_https    = false,
+  Hash                    $php_values           = {},
+  Boolean                 $forwarded_custom_log = true,
+  Array                   $rewrites             = []
 ) {
+  $apache_user = lookup('projects::project::apache::apache_user', String, first, 'apache')
 
   if ($ip) {
     $ip_based = true
