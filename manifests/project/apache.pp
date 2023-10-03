@@ -3,10 +3,11 @@
 # Defines an apache project
 define projects::project::apache (
   $vhosts           = {},
-  $apache_user      = 'apache',
   $apache_common    = {},
   $default_vhost    = true,
 ) {
+  $apache_user = lookup('projects::project::apache::apache_user', String, first, 'apache')
+
   if !defined(Class['::apache']) {
     ensure_resource('class', '::apache', {
       default_vhost         => $default_vhost,
