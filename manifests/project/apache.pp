@@ -6,8 +6,6 @@ define projects::project::apache (
   Hash    $apache_common = {},
   Boolean $default_vhost = true,
 ) {
-  $apache_user = lookup('projects::project::apache::apache_user', String, first, 'apache')
-
   if !defined(Class['::apache']) {
     ensure_resource('class', '::apache', {
       default_vhost         => $default_vhost,
@@ -86,6 +84,8 @@ define projects::project::apache (
   } else {
     include ::apache::mod::wsgi
   }
+
+  $apache_user = $::apache::user
 
   file { "${::projects::basedir}/${title}/var/log/httpd":
     ensure  => directory,
@@ -169,13 +169,13 @@ define projects::project::apache::vhost (
   Boolean                 $forwarded_custom_log = true,
   Array                   $rewrites             = []
 ) {
-  $apache_user = lookup('projects::project::apache::apache_user', String, first, 'apache')
-
   if ($ip) {
     $ip_based = true
   } else {
     $ip_based = false
   }
+
+  $apache_user = $::apache::user
 
   concat::fragment { "${projectname} apache ${title} vhost":
     target  => "${::projects::basedir}/${projectname}/README",
