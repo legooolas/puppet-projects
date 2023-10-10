@@ -1,21 +1,98 @@
 {
-  "name": "danfoster-projects",
-  "version": "0.1.0",
+  "name": "ilrt-projects",
+  "version": "4.0.0",
   "author": "danfoster",
   "summary": "A puppet module to manage overall projects",
   "license": "Apache 2.0",
-  "source": "https://github.com/danfoster/puppet-projects",
-  "project_page": "https://github.com/danfoster/puppet-projects",
-  "issues_url": "https://github.com/danfoster/puppet-projects/issues",
+  "source": "https://github.com/ilrt/puppet-projects",
+  "project_page": "https://github.com/ilrt/puppet-projects",
+  "issues_url": "https://github.com/ilrt/puppet-projects/issues",
   "dependencies": [
-    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"},
-    {"name":"puppetlabs-mysql","version_requirement":">= 3.4.0"},
-    {"name":"puppetlabs-concat","version_requirement":">= 1.2.3"},
-    {"name":"puppetlabs-apache","version_requirement":">= 1.5.0"},
-    {"name":"camptocamp-openssl","version_requirement":">= 1.5.1"},
-    {"name":"puppetlabs-tomcat","version_requirement":">= 1.3.0"},
-    {"name":"saz-sudo","version_requirement":">= 3.1.0"},
-    {"name":"pdxcat-group","version_requirement":">= 0.0.2"}
-  ]
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "puppetlabs-mysql",
+      "version_requirement": ">= 3.4.0"
+    },
+    {
+      "name": "puppetlabs-concat",
+      "version_requirement": ">= 1.2.3"
+    },
+    {
+      "name": "puppetlabs-apache",
+      "version_requirement": ">= 9.0.0"
+    },
+    {
+      "name": "camptocamp-openssl",
+      "version_requirement": ">= 1.5.1"
+    },
+    {
+      "name": "puppetlabs-tomcat",
+      "version_requirement": ">= 1.3.0"
+    },
+    {
+      "name": "saz-sudo",
+      "version_requirement": ">= 3.1.0"
+    },
+    {
+      "name": "onyxpoint-gpasswd",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "OracleLinux",
+      "operatingsystemrelease": [
+        "7", "8"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7", "8"
+      ]
+    },
+    {
+      "operatingsystem": "Scientific",
+      "operatingsystemrelease": [
+        "7", "8"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "10", "11", "12"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "18.04", "20.04", "22.04"
+      ]
+    },
+    {
+      "operatingsystem": "windows",
+      "operatingsystemrelease": [
+        "2019",
+        "10"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 6.21.0 < 8.0.0"
+    }
+  ],
+  "pdk-version": "2.7.1",
+  "template-url": "pdk-default#2.7.4",
+  "template-ref": "tags/2.7.4-0-g58edf57"
 }
-

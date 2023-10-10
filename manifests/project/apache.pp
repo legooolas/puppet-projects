@@ -50,15 +50,10 @@ define projects::project::apache (
   if $apache_common['php'] {
     include '::apache::mod::php'
 
-    # TODO : This should be via hiera data rather than params or this sort of hackery, but we're testing here for the moment...
-    $os_id = "${::facts['os']['name']}-${::facts['os']['release']['major']}"
-
-    if $os_id in [ 'Ubuntu-22.04' ] {
-      $php_packages = [ 'php-mysql', 'php-mbstring', 'php-snmp' ]
-    } else {
-      $php_packages = ['php-pdo', 'php-mysql', 'php-mbstring', 'php-snmp']
+    $php_packages = lookup('projects::php_packages', Array, deep, ['php-pdo', 'php-mysql', 'php-mbstring', 'php-snmp'])
+    if !empty($php_packages) {
+      ensure_packages($php_packages)
     }
-    ensure_packages($php_packages)
   }
 
   if $apache_common['mpm'] == 'event' {
