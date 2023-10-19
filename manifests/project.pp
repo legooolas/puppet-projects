@@ -27,8 +27,9 @@ define projects::project (
     }
 
     group { $title:
-      gid      => $gid,
-      members  => $users,
+      gid             => $gid,
+      members         => $users,
+      auth_membership => true, # Purge group of unmanaged members
     }
 
     file { [
