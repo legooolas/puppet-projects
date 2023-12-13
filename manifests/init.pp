@@ -33,7 +33,7 @@ class projects (
   $webuser = lookup('projects::webuser', Enum['apache', 'www-data'], first, 'apache')
 
   file { '/usr/local/bin/reset-perms':
-    source  => epp('projects/bin/reset-perms.epp', {
+    content => epp('projects/bin/reset-perms.epp', {
       webuser => $webuser,
       }),
     owner   => 'root',
