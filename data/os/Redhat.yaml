@@ -2,3 +2,5 @@
 projects::php_packages:
   # Additional package on RHEL distros but not Ubuntu:
   - 'php-pdo'
+
+projects::webuser: 'apache'

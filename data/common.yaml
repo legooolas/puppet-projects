@@ -3,3 +3,5 @@ projects::php_packages:
   - 'php-mysql'
   - 'php-mbstring'
   - 'php-snmp'
+
+projects::webuser: 'apache'

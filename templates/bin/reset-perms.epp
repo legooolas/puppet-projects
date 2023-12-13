@@ -1,3 +1,6 @@
+<%- |
+  Enum['apache', 'www-data'] $webuser,
+| -%>
 #!/bin/bash
 
 # Allow users to reset permissions on directory structures to the defaults
@@ -5,7 +8,7 @@ export PATH="/usr/local/bin:/usr/bin:/bin"
 set -e
 
 Base='/srv/projects'
-WebUser='apache'
+WebUser='<%= $webuser %>'
 DefDirMod='2775'
 DefFileMod='u+rw,g+rw,o+r-w'
 

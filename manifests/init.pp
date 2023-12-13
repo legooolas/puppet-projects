@@ -30,8 +30,12 @@ class projects (
     target => $basedir,
   }
 
+  $webuser = lookup('projects::webuser', String, first, 'apache')
+
   file { '/usr/local/bin/reset-perms':
-    source  => "puppet:///modules/projects/bin/reset-perms",
+    source  => template('projects/bin/reset-perms.epp', { 
+      webuser => $webuser,
+      }),
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
