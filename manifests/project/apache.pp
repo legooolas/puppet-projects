@@ -105,6 +105,7 @@ define projects::project::apache (
     owner   => $title,
     group   => $title,
     seltype => 'httpd_config_t',
+    mode    => '0770',
     require => File["${::projects::basedir}/${title}/etc"],
   }
 
@@ -121,6 +122,7 @@ define projects::project::apache (
     ensure  => directory,
     owner   => $title,
     group   => $title,
+    mode    => '0770',
     seltype => 'cert_t',
     require => File["${::projects::basedir}/${title}/etc"],
   }
@@ -132,6 +134,7 @@ define projects::project::apache (
     ensure  => directory,
     owner   => $title,
     group   => $title,
+    mode    => '0770',
     require => File["${::projects::basedir}/${title}/etc/ssl"],
   }
 
