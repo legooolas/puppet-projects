@@ -1,2 +1,5 @@
 ---
+projects::php_packages:
+  - 'php-mysql' # Also on Ubuntu but not EL8
+
 projects::webuser: 'www-data'
