@@ -1,6 +1,5 @@
 ---
 projects::php_packages:
-  - 'php-mysql' # Also on Ubuntu but not EL8
   - 'php-pdo'   # Additional package on RHEL distros but not Ubuntu
 
 projects::webuser: 'apache'
