@@ -174,7 +174,10 @@ define projects::project::apache::vhost (
   Boolean                 $redirect_to_https    = false,
   Hash                    $php_values           = {},
   Boolean                 $forwarded_custom_log = true,
-  Array                   $rewrites             = []
+  Array                   $rewrites             = [],
+  Variant[String, Undef]  $ssl_cert             = undef,
+  Variant[String, Undef]  $ssl_chain            = undef,
+  Variant[String, Undef]  $ssl_key              = undef,
 ) {
   if ($ip) {
     $ip_based = true
@@ -226,6 +229,53 @@ define projects::project::apache::vhost (
     $custom_log_entries = {}
   }
 
+  # If SSL cert/chain/key files explicitly stated then use these names or paths instead of the in-project ones:
+  # Note that cacerts is an internal module, not yet released to the public at large, but we need it
+  #  to match up with our other project cert paths...
+  if $ssl_chain {
+    if $ssl_chain =~ /^\// {
+      # Full path provided
+      $ssl_chain_path = $ssl_chain
+    } else {
+      # Relative path, so prepend global cert dir
+      include ::cacerts
+      $ssl_chain_path = "${::cacerts::certdir}/${ssl_chain}"
+    }
+  } else {
+    $ssl_chain_path = "${::projects::basedir}/${projectname}/etc/ssl/certs/${cert_name}.crt"
+  }
+  if $ssl_cert {
+    if $ssl_cert =~ /^\// {
+      # Full path provided
+      $ssl_cert_path = $ssl_cert
+    } else {
+      # Relative path, so prepend global cert dir
+      include ::cacerts
+      $ssl_cert_path = "${::cacerts::certdir}/${ssl_cert}"
+    }
+  } else {
+    $ssl_cert_path = "${::projects::basedir}/${projectname}/etc/ssl/certs/${cert_name}.crt"
+    ensure_resource('file', [
+      $ssl_cert_path,
+    ], { seltype => 'cert_t' } )
+  }
+  if $ssl_key {
+    if $ssl_key =~ /^\// {
+      # Full path provided
+      $ssl_key_path = $ssl_key
+    } else {
+      # Relative path, so prepend global cert dir
+      include ::cacerts
+      $ssl_key_path = "${::cacerts::certdir}/${ssl_key}"
+    }
+  } else {
+    $ssl_key_path = "${::projects::basedir}/${projectname}/etc/ssl/private/${cert_name}.key"
+    ensure_resource('file', [
+      $ssl_key_path,
+    ], { seltype => 'cert_t' } )
+  }
+
+
   if $redirect {
     ::apache::vhost { $title:
       servername            => $vhost_name,
@@ -239,15 +289,12 @@ define projects::project::apache::vhost (
       additional_includes   => 
       ["${::projects::basedir}/${projectname}/etc/apache/conf.d/*.conf",
       "${::projects::basedir}/${projectname}/etc/apache/conf.d/${title}/*.conf"],
-      ssl_cert              => 
-      "${::projects::basedir}/${projectname}/etc/ssl/certs/${cert_name}.crt",
-      ssl_chain             => 
-      "${::projects::basedir}/${projectname}/etc/ssl/certs/${cert_name}.crt",
-      ssl_key               => 
-      "${::projects::basedir}/${projectname}/etc/ssl/private/${cert_name}.key",
-      serveraliases       => $altnames,
+      ssl_cert              => $ssl_cert_path,
+      ssl_chain             => $ssl_chain_path,
+      ssl_key               => $ssl_key_path,
+      serveraliases         => $altnames,
       # Use mod_remoteip for client IP if available:
-      access_log_format   => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"',
+      access_log_format     => '%a %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"',
       ip                    => $ip,
       ip_based              => $ip_based,
       add_listen            => false,
@@ -286,12 +333,9 @@ define projects::project::apache::vhost (
       additional_includes   => 
       ["${::projects::basedir}/${projectname}/etc/apache/conf.d/*.conf",
       "${::projects::basedir}/${projectname}/etc/apache/conf.d/${title}/*.conf"],
-      ssl_cert              => 
-      "${::projects::basedir}/${projectname}/etc/ssl/certs/${cert_name}.crt",
-      ssl_chain             => 
-      "${::projects::basedir}/${projectname}/etc/ssl/certs/${cert_name}.crt",
-      ssl_key               => 
-      "${::projects::basedir}/${projectname}/etc/ssl/private/${cert_name}.key",
+      ssl_cert              => $ssl_cert_path,
+      ssl_chain             => $ssl_chain_path,
+      ssl_key               => $ssl_key_path,
       serveraliases         => $altnames,
       ip                    => $ip,
       ip_based              => $ip_based,
@@ -316,13 +360,6 @@ define projects::project::apache::vhost (
       seltype => 'httpd_sys_content_t',
     }
   }
-
-  ensure_resource('file', [
-	"${::projects::basedir}/${projectname}/etc/ssl/certs/${cert_name}.crt",
-	"${::projects::basedir}/${projectname}/etc/ssl/private/${cert_name}.key"
-    ],
-    { seltype => 'cert_t' }
-  )
 
   if !defined(Firewall["050 accept Apache ${port}"]) {
     firewall { "050 accept Apache ${port}":
