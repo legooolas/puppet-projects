@@ -58,6 +58,11 @@ mod 'onyxpoint-gpasswd', '1.0.6'
 
 to `Puppetfile` in your control repository.
 
+
+The `SOP/cacerts` module (not yet publically released) is needed when the `ssl_cert`, `ssl_chain` or `ssl_key` parameters to apache vhosts are
+used without absolute paths.  This is to prepend the certs dir to the name given.
+
+
 ### Beginning with projects
 
 
